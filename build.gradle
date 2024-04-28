@@ -2,5 +2,23 @@
 
 plugins {
     id 'com.gtnewhorizons.gtnhconvention'
-    id 'c'
+}
+
+dependencies {
+    implementation(project(':natives').components)
+}
+
+jar {
+//    include(project(':natives').components.named('main'))
+    from {
+        def all = project(':natives').components.named('main').get().binaries.get().findAll {
+            it instanceof CppSharedLibrary
+        }
+        all*.runtimeFile
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+classes.dependsOn {
+    project(':natives').tasks.named('linkRelease')
 }

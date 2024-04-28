@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8.5-GTNH",
+  "package": "net.glease.autoime.mixins",
+  "plugin": "net.glease.autoime.AutoIMEMixinPlugin",
+  "refmap": "mixins.autoime.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "client": [],
+  "server": []
+}
