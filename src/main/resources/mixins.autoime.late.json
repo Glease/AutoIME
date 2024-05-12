@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "minVersion": "0.8.3-GTNH",
+  "package": "net.glease.autoime.mixins.late",
+  "refmap": "mixins.autoime.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8"
+}

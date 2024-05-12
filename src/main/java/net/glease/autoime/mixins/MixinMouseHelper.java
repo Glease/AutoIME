@@ -19,6 +19,6 @@ public class MixinMouseHelper {
     @Inject(method = "ungrabMouseCursor",
         at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Mouse;setGrabbed(Z)V", remap = false))
     public void autoime$onUngrab(CallbackInfo ci) {
-        ImmUtil.enable();
+//        ImmUtil.enable();
     }
 }

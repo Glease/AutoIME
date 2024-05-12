@@ -34,7 +34,8 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.5.4-GTNH:dev")
+    implementation group: 'com.github.GTNewHorizons', name: 'BetterQuesting', version: '3.6.0-GTNH'
+    implementation("com.github.GTNewHorizons:NotEnoughItems:2.5.4-GTNH:dev")
     // https://mvnrepository.com/artifact/net.java.dev.jna/jna
     implementation group: 'net.java.dev.jna', name: 'jna', version: '5.14.0'
     // https://mvnrepository.com/artifact/net.java.dev.jna/jna-platform

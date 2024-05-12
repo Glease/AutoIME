@@ -69,7 +69,8 @@ public class AutoIMEMixinPlugin implements IMixinConfigPlugin {
     @Override
     public List<String> getMixins() {
         if (Util.getOSType() == Util.EnumOS.WINDOWS && FMLLaunchHandler.side().isClient())
-            return ImmutableList.of("MixinMouseHelper");
+            return ImmutableList.of("MixinGuiTextField", "MixinMouseHelper");
+//            return ImmutableList.of("MixinMouseHelper");
         return Collections.emptyList();
     }
 
