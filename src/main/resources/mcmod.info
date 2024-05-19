@@ -1,0 +1,17 @@
+[
+    {
+        "modid": "autoime",
+        "name": "AutoIME",
+        "description": "Auto turn off IME when needed",
+        "version": "${modVersion}",
+        "mcversion": "${minecraftVersion}",
+        "url": "",
+        "updateUrl": "",
+        "authorList": ["glease"],
+        "license": "All rights reserved",
+        "credits": "unimixin authors for mixin support. NEIPA members for testing alpha builds. Raven and others for GTNHGradle.",
+        "logoFile": "",
+        "screenshots": [],
+        "dependencies": []
+    }
+]

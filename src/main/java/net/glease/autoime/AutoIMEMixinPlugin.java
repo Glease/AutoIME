@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class AutoIMEMixinPlugin implements IMixinConfigPlugin {
             if (dll == null) {
                 return;
             }
-            Files.copy(dll, dllPath.toPath());
+            Files.copy(dll, dllPath.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             LOG.warn("Failed to release autoime dll", e);
         }

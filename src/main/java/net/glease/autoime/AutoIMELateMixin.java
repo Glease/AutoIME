@@ -17,9 +17,13 @@ public class AutoIMELateMixin implements ILateMixinLoader {
 
     @Override
     public List<String> getMixins(Set<String> loadedMods) {
+        ImmutableList.Builder<String> builder = ImmutableList.builder();
         if (loadedMods.contains("betterquesting")) {
-            return ImmutableList.of("MixinPanelTextField");
+            builder.add("MixinPanelTextField");
         }
-        return Collections.emptyList();
+        if (loadedMods.contains("BiblioCraft")) {
+            builder.add("MixinGuiBiblioTextField");
+        }
+        return builder.build();
     }
 }
