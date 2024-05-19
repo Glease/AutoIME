@@ -1,6 +1,5 @@
 package net.glease.autoime;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +23,7 @@ public class AutoIMELateMixin implements ILateMixinLoader {
         if (loadedMods.contains("BiblioCraft")) {
             builder.add("MixinGuiBiblioTextField");
         }
+        AutoIMEMixinPlugin.LOG.info("Enabled mixins: {}", builder.build());
         return builder.build();
     }
 }

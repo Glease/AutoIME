@@ -1,7 +1,7 @@
 package net.glease.autoime.mixins.late;
 
 import jds.bibliocraft.gui.GuiBiblioTextField;
-import net.glease.autoime.ImmUtil;
+import net.glease.autoime.TextFieldFocusTracker;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,9 +16,9 @@ public class MixinGuiBiblioTextField {
     @Inject(method = "/.*/", remap = false, at = @At(remap = false, value = "FIELD", target = "Ljds/bibliocraft/gui/GuiBiblioTextField;isFocused:Z", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER, by = 1))
     public void autoime$onFocusChanged(CallbackInfo ci) {
         if (isFocused) {
-            ImmUtil.enable();
+            TextFieldFocusTracker.markFocused(this);
         } else {
-            ImmUtil.disable();
+            TextFieldFocusTracker.markUnfocused(this);
         }
     }
 }

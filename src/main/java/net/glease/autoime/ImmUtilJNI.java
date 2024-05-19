@@ -18,14 +18,14 @@ public class ImmUtilJNI implements ImmUtil.ImmUtilImpl {
     }
 
     @Override
-    public void enable() {
+    public synchronized void enable() {
         postAssociate(enable0());
     }
 
     private native long enable0();
 
     @Override
-    public void disable() {
+    public synchronized void disable() {
         postAssociate(disable0());
     }
 

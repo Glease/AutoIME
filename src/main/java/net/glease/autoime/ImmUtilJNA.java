@@ -38,7 +38,7 @@ public class ImmUtilJNA implements ImmUtil.ImmUtilImpl {
     }
 
     @Override
-    public void enable() {
+    public synchronized void enable() {
         HIMC curCtx = IMM32.ImmGetContext(hwnd);
         if (curCtx != null) return;
         HIMC toSet = himc;
@@ -50,7 +50,7 @@ public class ImmUtilJNA implements ImmUtil.ImmUtilImpl {
     }
 
     @Override
-    public void disable() {
+    public synchronized void disable() {
         HIMC curCtx = IMM32.ImmGetContext(hwnd);
         if (curCtx == null) return;
         himc = IMM32.ImmAssociateContext(hwnd, null);

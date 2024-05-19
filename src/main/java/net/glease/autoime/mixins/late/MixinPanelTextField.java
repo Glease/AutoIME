@@ -2,6 +2,7 @@ package net.glease.autoime.mixins.late;
 
 import betterquesting.api2.client.gui.controls.PanelTextField;
 import net.glease.autoime.ImmUtil;
+import net.glease.autoime.TextFieldFocusTracker;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,9 +17,9 @@ public class MixinPanelTextField {
     @Inject(method = "/.*/", remap = false, at = @At(remap = false, value = "FIELD", target = "Lbetterquesting/api2/client/gui/controls/PanelTextField;isFocused:Z", opcode = Opcodes.PUTFIELD, shift = At.Shift.AFTER, by = 1))
     public void autoime$onFocusChanged(CallbackInfo ci) {
         if (isFocused) {
-            ImmUtil.enable();
+            TextFieldFocusTracker.markFocused(this);
         } else {
-            ImmUtil.disable();
+            TextFieldFocusTracker.markUnfocused(this);
         }
     }
 }
