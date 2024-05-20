@@ -29,6 +29,12 @@ public class AutoIMEMixinPlugin implements IMixinConfigPlugin {
         if (!Tags.VERSION.contains("dirty") && dllPath.exists() && checkDLL(dllPath)) {
             return;
         }
+        String[] oldDllNames = Launch.minecraftHome.list((d, f) -> f.startsWith("autoime") && f.endsWith(".dll"));
+        if (oldDllNames == null)
+            oldDllNames = new String[0];
+        for (String oldDllName : oldDllNames) {
+             boolean ignored = new File(Launch.minecraftHome, oldDllName).delete();
+        }
         try {
             InputStream dll = this.getClass().getClassLoader().getResourceAsStream("autoime.dll");
             if (dll == null) {
