@@ -39,7 +39,7 @@ task signJar() {
         outputs.file jar.destinationDirectory.map { d -> new File(new File(d.asFile, "signed"), it.name) }
     }
     doLast {
-        jar.outputs.files.forEach {
+        reobfJar.outputs.files.forEach {
             ant.signjar destDir: new File(jar.destinationDirectory.get().asFile, "signed"),
                 sigfile: project.hasProperty("signerName") ? project.signerName : project.keyStoreAlias,
                 keystore: project.keyStore,
