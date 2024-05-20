@@ -56,7 +56,7 @@ jobs:
 
       - name: Build the mod
 #        run: ./gradlew --build-cache --info --stacktrace -PmavenPublishUrl='${{ env.MAVEN_PUBLISHING_URL }}' assemble
-        run: ./gradlew --build-cache --info --stacktrace "-PkeyStore=keystore.jks" "-PkeyStoreAlias=${{ secrets.KEYSTORE_ALIAS }}" -PkeyStorePass="${{ secrets.KEYSTORE_STOREPASS }}" -PkeyStoreKeyPass="${{ secrets.KEYSTORE_KEYPASS }}" assemble && ./gradlew --stop
+        run: ./gradlew --build-cache --info --stacktrace -PsignerName=glease "-PkeyStore=keystore.jks" "-PkeyStoreAlias=${{ secrets.KEYSTORE_ALIAS }}" -PkeyStorePass="${{ secrets.KEYSTORE_STOREPASS }}" -PkeyStoreKeyPass="${{ secrets.KEYSTORE_KEYPASS }}" assemble && ./gradlew --stop
 
       # Continue on error in the following steps to make sure releases still get made even if one of the methods fails
 

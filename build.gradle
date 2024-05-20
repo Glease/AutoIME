@@ -9,7 +9,6 @@ dependencies {
 }
 
 jar {
-//    include(project(':natives').components.named('main'))
     from {
         def all = project(':natives').components.named('main').get().binaries.get().findAll {
             it instanceof CppSharedLibrary && it.optimized
