@@ -53,7 +53,8 @@ task("sign") {
                 "url"       to "https://github.com/Glease/AutoIME",
                 "keystore"  to project.property("keyStore"),
                 "alias"     to project.property("keyStoreAlias"),
-                "storepass" to project.property("keyStoreKeyPass"),
+                "storepass" to project.property("keyStorePass"),
+                "keypass" to project.property("keyStoreKeyPass"),
                 "tsaurl"    to "http://timestamp.sectigo.com")
         }
     }
