@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import vswe.stevesfactory.interfaces.GuiManager;
 
 @Mod(modid = "autoime", name = "autoime", version = Tags.VERSION)
 public class AutoIME {
@@ -26,10 +27,16 @@ public class AutoIME {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public void onGuiOpen(GuiOpenEvent event) {
             TextFieldFocusTracker.clear();
-            if (event.gui instanceof GuiEditSign) {
+            if (isWhitelistedGUI(event)) {
                 ImmUtil.enable();
             }
         }
+    }
+
+    private static boolean isWhitelistedGUI(GuiOpenEvent event) {
+        if (event.gui instanceof GuiEditSign) return true;
+        if (Loader.isModLoaded("StevesFactoryManager") && event.gui instanceof GuiManager) return true;
+        return false;
     }
 
     public static class FMLEventHandler {

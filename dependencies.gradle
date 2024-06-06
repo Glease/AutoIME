@@ -41,4 +41,5 @@ dependencies {
     implementation group: 'net.java.dev.jna', name: 'jna', version: '5.14.0'
     // https://mvnrepository.com/artifact/net.java.dev.jna/jna-platform
     implementation group: 'net.java.dev.jna', name: 'jna-platform', version: '5.14.0'
+    implementation group: 'com.github.GTNewHorizons', name: 'Steve-s-Factory-Manager', version: '1.2.3-GTNH', classifier: 'dev'
 }
