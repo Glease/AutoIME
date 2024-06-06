@@ -1,5 +1,7 @@
 package net.glease.autoime;
 
+import java.util.Objects;
+
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
@@ -57,6 +59,15 @@ public class ImmUtilJNA implements ImmUtil.ImmUtilImpl {
         postAssociate(null);
     }
 
+    @Override
+    public void reinit() {
+        hwnd = null;
+        if (himc != null && Objects.equals(himc.getPointer(), Pointer.NULL)) {
+            IMM32.ImmDestroyContext(himc);
+            himc = null;
+        }
+    }
+
     public interface Imm32 extends StdCallLibrary {
 
         HIMC ImmGetContext(WinDef.HWND hwnd);
@@ -64,6 +75,8 @@ public class ImmUtilJNA implements ImmUtil.ImmUtilImpl {
         HIMC ImmCreateContext();
 
         HIMC ImmAssociateContext(WinDef.HWND hwnd, HIMC newCtx);
+
+        boolean ImmDestroyContext(HIMC ctx);
     }
 
     public static class HIMC extends WinNT.HANDLE {

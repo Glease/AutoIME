@@ -22,22 +22,30 @@ public class ImmUtil {
 
     public interface ImmUtilImpl {
         boolean init();
+
         void enable();
+
         void disable();
+
+        void reinit();
     }
 
-    private static ImmUtilImpl instance;
+    private static volatile ImmUtilImpl instance;
 
     static boolean init() {
         if (instance == null) {
-            try {
-                instance = new ImmUtilJNI();
-            } catch (Throwable ignore) {
-                try {
-                    instance = new ImmUtilJNA();
-                } catch (Throwable e) {
-                    AutoIMEMixinPlugin.LOG.error("Cannot initialize ImmUtil. Mod will NOT WORK", e);
-                    return false;
+            synchronized (ImmUtil.class) {
+                if (instance == null) {
+                    try {
+                        instance = new ImmUtilJNI();
+                    } catch (Throwable ignore) {
+                        try {
+                            instance = new ImmUtilJNA();
+                        } catch (Throwable e) {
+                            AutoIMEMixinPlugin.LOG.error("Cannot initialize ImmUtil. Mod will NOT WORK", e);
+                            return false;
+                        }
+                    }
                 }
             }
         }
@@ -56,6 +64,11 @@ public class ImmUtil {
             return;
         }
         instance.enable();
+    }
+
+    public static synchronized void reinit() {
+        if (instance == null) return;
+        instance.reinit();
     }
 
 }

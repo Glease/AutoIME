@@ -2,7 +2,7 @@ package net.glease.autoime;
 
 public class ImmUtilJNI implements ImmUtil.ImmUtilImpl {
 
-    private long hwnd;
+    private volatile long hwnd;
     private long himc;
 
     @Override
@@ -28,6 +28,17 @@ public class ImmUtilJNI implements ImmUtil.ImmUtilImpl {
     public synchronized void disable() {
         postAssociate(disable0());
     }
+
+    @Override
+    public synchronized void reinit() {
+        hwnd = 0;
+        if (himc != 0) {
+            destroyContext(himc);
+            himc = 0;
+        }
+    }
+
+    private static native void destroyContext(long himc);
 
     private native long disable0();
     private void postAssociate(long toSet) {

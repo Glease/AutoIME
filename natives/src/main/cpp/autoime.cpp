@@ -43,3 +43,8 @@ JNIEXPORT jlong JNICALL Java_net_glease_autoime_ImmUtilJNI_disable0
     env->SetLongField(obj, fieldIdHIMC, (jlong) old);
     return (jlong) old;
 }
+
+JNIEXPORT void JNICALL Java_net_glease_autoime_ImmUtilJNI_destroyContext
+  (JNIEnv *env, jclass klass, jlong himc) {
+    ImmDestroyContext(himc);
+}

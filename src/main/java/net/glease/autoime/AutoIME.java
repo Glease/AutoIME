@@ -5,11 +5,13 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import org.lwjgl.input.Keyboard;
 import vswe.stevesfactory.interfaces.GuiManager;
 
 @Mod(modid = "autoime", name = "autoime", version = Tags.VERSION)
@@ -44,6 +46,15 @@ public class AutoIME {
         public void onClientTick(TickEvent.ClientTickEvent event) {
             if (event.phase == TickEvent.Phase.END) {
                 TextFieldFocusTracker.onTickEnd();
+            }
+        }
+
+        @SubscribeEvent
+        public void onKeyInput(InputEvent.KeyInputEvent event) {
+            if (Minecraft.getMinecraft().currentScreen == null &&
+                Keyboard.isKeyDown(Keyboard.KEY_F3) && Keyboard.isKeyDown(Keyboard.KEY_C)) {
+                ImmUtil.reinit();
+                ImmUtil.disable();
             }
         }
     }
