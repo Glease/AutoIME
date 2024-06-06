@@ -46,5 +46,5 @@ JNIEXPORT jlong JNICALL Java_net_glease_autoime_ImmUtilJNI_disable0
 
 JNIEXPORT void JNICALL Java_net_glease_autoime_ImmUtilJNI_destroyContext
   (JNIEnv *env, jclass klass, jlong himc) {
-    ImmDestroyContext(himc);
+    ImmDestroyContext((HIMC) himc);
 }
