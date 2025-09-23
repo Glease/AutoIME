@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import net.minecraft.client.Minecraft;
+
 public class TextFieldFocusTracker {
     private static final Set<Object> focusedTextBox = Collections.newSetFromMap(new WeakHashMap<>());
 
@@ -22,7 +24,7 @@ public class TextFieldFocusTracker {
     public static void onTickEnd() {
         if (!focusedTextBox.isEmpty()) {
             ImmUtil.enable();
-        } else if (!AutoIME.isCurrentGuiWhitelisted()) {
+        } else if (!AutoIME.isGuiWhitelisted(Minecraft.getMinecraft().currentScreen)) {
             ImmUtil.disable();
         }
     }

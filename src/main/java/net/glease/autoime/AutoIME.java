@@ -1,46 +1,65 @@
 package net.glease.autoime;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Keyboard;
-import vswe.stevesfactory.interfaces.GuiManager;
 
 @Mod(modid = "autoime", name = "autoime", version = Tags.VERSION)
 public class AutoIME {
+    private static final List<Class<?>> forceEnableClasses = new ArrayList<>();
+
     public AutoIME() {
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
         FMLCommonHandler.instance().bus().register(new FMLEventHandler());
     }
 
-    public static boolean isCurrentGuiWhitelisted() {
-        return Minecraft.getMinecraft().currentScreen instanceof GuiEditSign;
+    public static boolean isGuiWhitelisted(GuiScreen screen) {
+        return screen instanceof GuiEditSign || forceEnableClasses.stream().anyMatch(c -> c.isInstance(screen.getClass()));
+    }
+
+    @Mod.EventHandler
+    public void onPostInit(FMLPostInitializationEvent event) {
+        // cba to work with something I don't use at all, yet we should not just break this mod outright
+        addForceEnableGUI("vswe.stevesfactory.interfaces.GuiManager");
+        // gtnh interface terminal autofocus on interface name field BEFORE gui open event is sent.
+        // so we just force enable IME for it
+        addForceEnableGUI("com.glodblock.github.client.gui.GuiInterfaceWireless");
+        addForceEnableGUI("appeng.client.gui.implementations.GuiInterfaceTerminal");
+    }
+
+    private static void addForceEnableGUI(String className) {
+        Class<?> clazz;
+        try {
+            clazz = Class.forName(className);
+        } catch (ReflectiveOperationException ignore) {
+            return;
+        }
+        forceEnableClasses.add(clazz);
     }
 
     public static class ForgeEventHandler {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public void onGuiOpen(GuiOpenEvent event) {
             TextFieldFocusTracker.clear();
-            if (isWhitelistedGUI(event)) {
+            if (isGuiWhitelisted(event.gui)) {
                 ImmUtil.enable();
             }
         }
-    }
-
-    private static boolean isWhitelistedGUI(GuiOpenEvent event) {
-        if (event.gui instanceof GuiEditSign) return true;
-        if (Loader.isModLoaded("StevesFactoryManager") && event.gui instanceof GuiManager) return true;
-        return false;
     }
 
     public static class FMLEventHandler {
