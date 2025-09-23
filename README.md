@@ -2,7 +2,11 @@
 
 Disable IME automatically when a textbox is focused. Currently works with windows only.
 
+只在文本框被选中时启用输入法。目前只兼容Windows
+
 Still requires [InputFix](https://github.com/zlainsama/InputFix) to allow IME to work at all though.
+
+在lwjgl2下仍然需要[InputFix](https://github.com/zlainsama/InputFix)来允许中文输入
 
 拒绝这很贵的！
 
@@ -28,6 +32,8 @@ Open up later on when I cleared this up.
 1. InputFix. Semi-required to allow uses of IME
 2. BetterQuesting.
 3. BiblioCraft
+4. JourneyMap
+5. SteveFactoryManager (imperfect)
 
 
 ## Download
