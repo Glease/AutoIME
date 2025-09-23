@@ -29,6 +29,7 @@ public class AutoIME {
     }
 
     public static boolean isGuiWhitelisted(GuiScreen screen) {
+        if (screen == null) return false;
         return screen instanceof GuiEditSign || forceEnableClasses.stream().anyMatch(c -> c.isInstance(screen.getClass()));
     }
 
