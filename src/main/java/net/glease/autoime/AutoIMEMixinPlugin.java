@@ -55,6 +55,7 @@ public class AutoIMEMixinPlugin implements IMixinConfigPlugin {
         } catch (LinkageError e) {
             return false;
         }
+        LOG.info("Loaded DLL from " + dllPath.getAbsolutePath());
         return true;
     }
 

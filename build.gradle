@@ -23,8 +23,8 @@ jar {
             it instanceof CppSharedLibrary && it.optimized
         }
         all*.runtimeFile
-        sourceSets.lwjgl3compat.output
     }
+    from sourceSets.lwjgl3compat.output
 }
 
 task createSignedJarDir() {
