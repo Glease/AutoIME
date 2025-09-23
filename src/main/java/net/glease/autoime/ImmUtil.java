@@ -10,10 +10,16 @@ public class ImmUtil {
             Method getImplementation_method = Display.class.getDeclaredMethod("getImplementation");
             getImplementation_method.setAccessible(true);
             Object display_impl = getImplementation_method.invoke(null);
-            Class<?> WindowsDisplay_class = Class.forName("org.lwjgl.opengl.WindowsDisplay");
-            Method getHwnd_method = WindowsDisplay_class.getDeclaredMethod("getHwnd");
-            getHwnd_method.setAccessible(true);
-            return (Long) getHwnd_method.invoke(display_impl);
+            if (display_impl == null) {
+                // probably lwjgl3ify
+                AutoIMEMixinPlugin.LOG.info("Maybe LWJGL3ify. if you are not using it, please report this to author along with your modpack");
+                return ImmUtilLWJGL3ify.getHwnd();
+            } else {
+                Class<?> WindowsDisplay_class = Class.forName("org.lwjgl.opengl.WindowsDisplay");
+                Method getHwnd_method = WindowsDisplay_class.getDeclaredMethod("getHwnd");
+                getHwnd_method.setAccessible(true);
+                return (Long) getHwnd_method.invoke(display_impl);
+            }
         } catch (ReflectiveOperationException ex) {
             AutoIMEMixinPlugin.LOG.error("Failed to get HWND", ex);
             return 0;

@@ -4,8 +4,17 @@ plugins {
     id 'com.gtnewhorizons.gtnhconvention'
 }
 
+sourceSets {
+    lwjgl3compat {}
+}
+
 dependencies {
     implementation(project(':natives').components)
+    implementation(sourceSets.lwjgl3compat.output)
+    lwjgl3compatImplementation("com.github.GTNewHorizons:lwjgl3ify:2.1.14") { transitive = false}
+    lwjgl3compatImplementation("org.lwjgl:lwjgl:3.3.3")
+    lwjgl3compatImplementation("org.lwjgl:lwjgl-glfw:3.3.3")
+
 }
 
 jar {
@@ -14,6 +23,7 @@ jar {
             it instanceof CppSharedLibrary && it.optimized
         }
         all*.runtimeFile
+        sourceSets.lwjgl3compat.output
     }
 }
 

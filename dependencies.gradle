@@ -43,4 +43,5 @@ dependencies {
     implementation group: 'net.java.dev.jna', name: 'jna-platform', version: '5.14.0'
     implementation group: 'com.github.GTNewHorizons', name: 'Steve-s-Factory-Manager', version: '1.2.3-GTNH', classifier: 'dev'
     implementation rfg.deobf('maven.modrinth:journeymap:5.2.9')
+    compileOnly("com.github.GTNewHorizons:lwjgl3ify:2.1.15:dev") //{ transitive = false }
 }
