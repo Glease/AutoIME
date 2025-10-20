@@ -22,7 +22,7 @@ import org.lwjgl.input.Keyboard;
 @Mod(modid = "autoime", name = "autoime", version = Tags.VERSION)
 public class AutoIME {
     private static final List<Class<?>> forceEnableClasses = new ArrayList<>();
-    private static final List<Class<?>> forceEnableClassesOnce = new ArrayList<>();
+    private static final List<Class<?>> autoFocusedClasses = new ArrayList<>();
 
     public AutoIME() {
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
@@ -34,42 +34,53 @@ public class AutoIME {
         return forceEnableClasses.stream().anyMatch(c -> c.isInstance(screen));
     }
 
-    private static boolean isGuiWhitelistedOnOpen(GuiScreen screen) {
+    private static boolean isGuiHasAutoFocus(GuiScreen screen) {
         if (screen == null) return false;
-        return forceEnableClassesOnce.stream().anyMatch(c -> c.isInstance(screen));
+        return autoFocusedClasses.stream().anyMatch(c -> c.isInstance(screen));
     }
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
         // sign doesn't even use a text box
-        addForceEnableGUI(GuiEditSign.class.getName(), false);
+        addForceEnableGUI(GuiEditSign.class.getName());
         // cba to work with something I don't use at all, yet we should not just break this mod outright
-        addForceEnableGUI("vswe.stevesfactory.interfaces.GuiManager", false);
-        // gtnh interface terminal autofocus on interface name field BEFORE gui open event is sent.
-        // so we just force enable IME for it
-        addForceEnableGUI("com.glodblock.github.client.gui.GuiInterfaceWireless", true);
-        addForceEnableGUI("appeng.client.gui.implementations.GuiInterfaceTerminal", true);
+        addForceEnableGUI("vswe.stevesfactory.interfaces.GuiManager");
+        // gtnh interface terminal autofocus on interface name field BEFORE gui open event is sent
+        addAutoFocusGUI("com.glodblock.github.client.gui.GuiInterfaceWireless");
+        addAutoFocusGUI("appeng.client.gui.implementations.GuiInterfaceTerminal");
     }
 
-    private static void addForceEnableGUI(String className, boolean once) {
+    private static void addForceEnableGUI(String className) {
         Class<?> clazz;
         try {
             clazz = Class.forName(className);
         } catch (ReflectiveOperationException ignore) {
             return;
         }
-        forceEnableClassesOnce.add(clazz);
-        if (!once) {
-            forceEnableClasses.add(clazz);
+        forceEnableClasses.add(clazz);
+    }
+
+    private static void addAutoFocusGUI(String className) {
+        Class<?> clazz;
+        try {
+            clazz = Class.forName(className);
+        } catch (ReflectiveOperationException ignore) {
+            return;
         }
+        autoFocusedClasses.add(clazz);
     }
 
     public static class ForgeEventHandler {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public void onGuiOpen(GuiOpenEvent event) {
             TextFieldFocusTracker.clear();
-            if (isGuiWhitelistedOnOpen(event.gui)) {
+            if (isGuiWhitelisted(event.gui)) {
                 ImmUtil.enable();
+            } else if (isGuiHasAutoFocus(event.gui)) {
+                Object lastFocusedTextBox = TextFieldFocusTracker.getLastFocusedTextBox();
+                if (lastFocusedTextBox != null) {
+                    TextFieldFocusTracker.markFocused(lastFocusedTextBox);
+                }
             }
         }
     }

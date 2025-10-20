@@ -1,5 +1,6 @@
 package net.glease.autoime;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Set;
@@ -13,13 +14,19 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class TextFieldFocusTracker {
     private static final Set<Object> focusedTextBox = Collections.newSetFromMap(new WeakHashMap<>());
+    private static WeakReference<Object> lastFocusedTextBox = null;
 
     public static void markFocused(Object obj) {
         focusedTextBox.add(obj);
+        lastFocusedTextBox = new WeakReference<>(obj);
     }
 
     public static void markUnfocused(Object obj) {
         focusedTextBox.remove(obj);
+    }
+
+    public static Object getLastFocusedTextBox() {
+        return lastFocusedTextBox != null ? lastFocusedTextBox.get() : null;
     }
 
     public static void clear() {
