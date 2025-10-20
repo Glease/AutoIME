@@ -22,6 +22,7 @@ import org.lwjgl.input.Keyboard;
 @Mod(modid = "autoime", name = "autoime", version = Tags.VERSION)
 public class AutoIME {
     private static final List<Class<?>> forceEnableClasses = new ArrayList<>();
+    private static final List<Class<?>> forceEnableClassesOnce = new ArrayList<>();
 
     public AutoIME() {
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
@@ -30,34 +31,44 @@ public class AutoIME {
 
     public static boolean isGuiWhitelisted(GuiScreen screen) {
         if (screen == null) return false;
-        return screen instanceof GuiEditSign || forceEnableClasses.stream().anyMatch(c -> c.isInstance(screen.getClass()));
+        return forceEnableClasses.stream().anyMatch(c -> c.isInstance(screen));
+    }
+
+    private static boolean isGuiWhitelistedOnOpen(GuiScreen screen) {
+        if (screen == null) return false;
+        return forceEnableClassesOnce.stream().anyMatch(c -> c.isInstance(screen));
     }
 
     @Mod.EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
+        // sign doesn't even use a text box
+        addForceEnableGUI(GuiEditSign.class.getName(), false);
         // cba to work with something I don't use at all, yet we should not just break this mod outright
-        addForceEnableGUI("vswe.stevesfactory.interfaces.GuiManager");
+        addForceEnableGUI("vswe.stevesfactory.interfaces.GuiManager", false);
         // gtnh interface terminal autofocus on interface name field BEFORE gui open event is sent.
         // so we just force enable IME for it
-        addForceEnableGUI("com.glodblock.github.client.gui.GuiInterfaceWireless");
-        addForceEnableGUI("appeng.client.gui.implementations.GuiInterfaceTerminal");
+        addForceEnableGUI("com.glodblock.github.client.gui.GuiInterfaceWireless", true);
+        addForceEnableGUI("appeng.client.gui.implementations.GuiInterfaceTerminal", true);
     }
 
-    private static void addForceEnableGUI(String className) {
+    private static void addForceEnableGUI(String className, boolean once) {
         Class<?> clazz;
         try {
             clazz = Class.forName(className);
         } catch (ReflectiveOperationException ignore) {
             return;
         }
-        forceEnableClasses.add(clazz);
+        forceEnableClassesOnce.add(clazz);
+        if (!once) {
+            forceEnableClasses.add(clazz);
+        }
     }
 
     public static class ForgeEventHandler {
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         public void onGuiOpen(GuiOpenEvent event) {
             TextFieldFocusTracker.clear();
-            if (isGuiWhitelisted(event.gui)) {
+            if (isGuiWhitelistedOnOpen(event.gui)) {
                 ImmUtil.enable();
             }
         }
